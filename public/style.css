@@ -1,0 +1,69 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+#inputs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 250px;
+  font-size: 16px;
+  padding: 10px;
+  resize: vertical;
+}
+
+#diff-areas {
+  display: flex;
+  gap: 30px;
+}
+
+.diff-block {
+  width: 100%;
+}
+
+.diff-block h2 {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.diff-block h2.title-changed {
+  background: #ffe6e6;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.diff-changes {
+  font-size: 13px;
+  color: #b00;
+  margin-bottom: 6px;
+  margin-top: 2px;
+}
+
+.diff-block pre span {
+  color: #777;
+}
+
+pre {
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  padding: 10px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  min-height: 180px;
+  transition: background 0.2s;
+}
+
+ins {
+  background: #ccffcc;
+  text-decoration: none;
+}
+
+del {
+  background: #ffcccc;
+  text-decoration: none;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Diffツール</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Diffツール</h1>
+  <div id="inputs">
+    <textarea id="text1" placeholder="元のテキスト"></textarea>
+    <textarea id="text2" placeholder="比較するテキスト"></textarea>
+  </div>
+  <div id="result">
+    <div id="diff-areas">
+      <div class="diff-block">
+        <h2 id="diff1-title">元テキスト側の差分表示</h2>
+        <div id="diff1-changes"></div>
+        <pre id="diff1"></pre>
+      </div>
+      <div class="diff-block">
+        <h2 id="diff2-title">比較テキスト側の差分表示</h2>
+        <div id="diff2-changes"></div>
+        <pre id="diff2"></pre>
+      </div>
+    </div>
+  </div>
+  <script src="diff-match-patch.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
