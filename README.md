@@ -1,1 +1,1 @@
-# diff-ui
+# diff-ui (https://abe-ta.github.io/diff-ui/)
