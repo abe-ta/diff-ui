@@ -8,7 +8,15 @@ const diff2Title = document.getElementById('diff2-title');
 const diff1Changes = document.getElementById('diff1-changes');
 const diff2Changes = document.getElementById('diff2-changes');
 
+const diffNav = document.getElementById('diff-nav');
+const prevDiffBtn = document.getElementById('prev-diff');
+const nextDiffBtn = document.getElementById('next-diff');
+const diffCounter = document.getElementById('diff-counter');
+
 const dmp = new diff_match_patch();
+
+let diffGroupCount = 0;
+let currentDiffIndex = -1;
 
 function escapeHtml(str) {
     return str.replace(/[&<>"']/g, ch => ({
@@ -56,19 +64,31 @@ function calculateLineDiffs(textA, textB) {
     return {deleted, added};
 }
 
-function renderDiffLeft(a, b, diffs) {
+// 連続する差分(del/ins)を1つのグループとして番号付けする
+function assignDiffGroups(diffs) {
+    let groupIndex = -1;
+    let prevChanged = false;
     return diffs.map(part => {
+        const changed = part[0] !== 0;
+        if (changed && !prevChanged) groupIndex++;
+        prevChanged = changed;
+        return changed ? groupIndex : -1;
+    });
+}
+
+function renderDiffLeft(a, b, diffs, groups) {
+    return diffs.map((part, i) => {
         const type = part[0], text = part[1];
-        if (type === -1) return `<del>${escapeHtml(text)}</del>`;
+        if (type === -1) return `<del data-diff-index="${groups[i]}">${escapeHtml(text)}</del>`;
         if (type === 1) return '';
         return `<span>${escapeHtml(text)}</span>`;
     }).join('');
 }
 
-function renderDiffRight(a, b, diffs) {
-    return diffs.map(part => {
+function renderDiffRight(a, b, diffs, groups) {
+    return diffs.map((part, i) => {
         const type = part[0], text = part[1];
-        if (type === 1) return `<ins>${escapeHtml(text)}</ins>`;
+        if (type === 1) return `<ins data-diff-index="${groups[i]}">${escapeHtml(text)}</ins>`;
         if (type === -1) return '';
         return `<span>${escapeHtml(text)}</span>`;
     }).join('');
@@ -101,8 +121,11 @@ function updateDiff() {
         return htmls.join('<br>');
     }
 
+    const groupsLeft = assignDiffGroups(diffsLeft);
+    const groupsRight = assignDiffGroups(diffsRight);
+
     // 左（元テキスト側）
-    diff1.innerHTML = renderDiffLeft(text1.value, text2.value, diffsLeft);
+    diff1.innerHTML = renderDiffLeft(text1.value, text2.value, diffsLeft, groupsLeft);
     diff1Title.textContent = `元テキスト側の差分表示 ${changedLeft ? '(差分あり)' : '(差分なし)'}`;
     diff1Title.className = changedLeft ? 'title-changed' : '';
     diff1Changes.className = changedLeft ? 'diff-changes' : '';
@@ -110,13 +133,53 @@ function updateDiff() {
     diff1.className = '';
 
     // 右（比較テキスト側）にも 同じ行番号リストを表示
-    diff2.innerHTML = renderDiffRight(text1.value, text2.value, diffsRight);
+    diff2.innerHTML = renderDiffRight(text1.value, text2.value, diffsRight, groupsRight);
     diff2Title.textContent = `比較テキスト側の差分表示 ${changedRight ? '(差分あり)' : '(差分なし)'}`;
     diff2Title.className = changedRight ? 'title-changed' : '';
     diff2Changes.className = changedRight ? 'diff-changes' : '';
     diff2Changes.innerHTML = changedRight ? genChangeLines(lineDiffs) : '';
     diff2.className = '';
+
+    // 差分ナビゲーションの更新
+    const maxGroupIndex = Math.max(-1, ...groupsLeft, ...groupsRight);
+    diffGroupCount = maxGroupIndex + 1;
+    currentDiffIndex = -1;
+    updateDiffCounter();
 }
+
+function getDiffElements(index) {
+    return document.querySelectorAll(`[data-diff-index="${index}"]`);
+}
+
+function clearActiveDiff() {
+    document.querySelectorAll('.diff-active').forEach(el => el.classList.remove('diff-active'));
+}
+
+function goToDiff(index) {
+    if (diffGroupCount === 0) return;
+    currentDiffIndex = (index + diffGroupCount) % diffGroupCount;
+    clearActiveDiff();
+    const elements = getDiffElements(currentDiffIndex);
+    elements.forEach(el => el.classList.add('diff-active'));
+    if (elements.length) {
+        elements[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    updateDiffCounter();
+}
+
+function updateDiffCounter() {
+    const hasDiffs = diffGroupCount > 0;
+    diffCounter.textContent = hasDiffs
+        ? `${currentDiffIndex + 1} / ${diffGroupCount}`
+        : '0 / 0';
+    prevDiffBtn.disabled = !hasDiffs;
+    nextDiffBtn.disabled = !hasDiffs;
+    diffNav.classList.toggle('visible', hasDiffs);
+    document.body.classList.toggle('diff-nav-active', hasDiffs);
+}
+
+prevDiffBtn.addEventListener('click', () => goToDiff(currentDiffIndex - 1));
+nextDiffBtn.addEventListener('click', () => goToDiff(currentDiffIndex + 1));
 
 text1.addEventListener('input', updateDiff);
 text2.addEventListener('input', updateDiff);

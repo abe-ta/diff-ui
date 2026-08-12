@@ -67,3 +67,48 @@ del {
   background: #ffcccc;
   text-decoration: none;
 }
+
+ins.diff-active, del.diff-active {
+  outline: 2px solid #ff9900;
+  box-shadow: 0 0 0 2px #ff9900;
+}
+
+#diff-nav {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+#diff-nav.visible {
+  display: flex;
+}
+
+body.diff-nav-active {
+  padding-top: 56px;
+}
+
+#diff-nav button {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#diff-nav button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+#diff-counter {
+  font-size: 14px;
+  min-width: 60px;
+  text-align: center;
+}
