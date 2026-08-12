@@ -3,13 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Diffツール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Diffツール</h1>
+  <h1><span>Diff</span>ツール</h1>
   <div id="inputs">
-    <textarea id="text1" placeholder="元のテキスト"></textarea>
-    <textarea id="text2" placeholder="比較するテキスト"></textarea>
+    <div class="lego-plate lego-plate--blue">
+      <textarea id="text1" placeholder="元のテキスト"></textarea>
+    </div>
+    <div class="lego-plate lego-plate--green">
+      <textarea id="text2" placeholder="比較するテキスト"></textarea>
+    </div>
   </div>
   <div id="result">
     <div id="diff-nav">
@@ -18,12 +25,12 @@
       <button id="next-diff" type="button">次の差分 &rarr;</button>
     </div>
     <div id="diff-areas">
-      <div class="diff-block">
+      <div class="diff-block lego-plate lego-plate--yellow">
         <h2 id="diff1-title">元テキスト側の差分表示</h2>
         <div id="diff1-changes"></div>
         <pre id="diff1"></pre>
       </div>
-      <div class="diff-block">
+      <div class="diff-block lego-plate lego-plate--red">
         <h2 id="diff2-title">比較テキスト側の差分表示</h2>
         <div id="diff2-changes"></div>
         <pre id="diff2"></pre>
