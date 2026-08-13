@@ -9,6 +9,7 @@ const diff1Changes = document.getElementById('diff1-changes');
 const diff2Changes = document.getElementById('diff2-changes');
 
 const diffNav = document.getElementById('diff-nav');
+const scrollTopBtn = document.getElementById('scroll-top');
 const prevDiffBtn = document.getElementById('prev-diff');
 const nextDiffBtn = document.getElementById('next-diff');
 const diffCounter = document.getElementById('diff-counter');
@@ -180,6 +181,7 @@ function updateDiffCounter() {
 
 prevDiffBtn.addEventListener('click', () => goToDiff(currentDiffIndex - 1));
 nextDiffBtn.addEventListener('click', () => goToDiff(currentDiffIndex + 1));
+scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 text1.addEventListener('input', updateDiff);
 text2.addEventListener('input', updateDiff);

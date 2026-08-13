@@ -217,6 +217,10 @@ body.diff-nav-active {
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
+#scroll-top {
+  background: var(--lego-blue);
+}
+
 #diff-nav button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
